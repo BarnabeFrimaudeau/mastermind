@@ -1,117 +1,93 @@
 import random
 
+
 def create_code(characters, length):
-    ''' Creates a randomly generated code from a list with a restricted length.
-    characters = 'ABC'
-    length = 4
-    >>> ACAB
-    '''
+    '''Generate a random 4 letter code from 6 avaiable letters.'''
     code_generated = []
 
     for i in range(length):
         code_generated.append(random.choice(list(characters)))
-    
+
     return code_generated
 
+
 def find_fully_correct(answer, guess):
-    ''' Returns 'b' for each number of correctly positioned colors in the guess.
-    answer = ['P', 'G', 'R', 'O']
-    guess = ['Y', 'G', 'O', 'O']
-    >>> ['b', 'b']
-    answer = ['P', 'G', 'R', 'O']
-    guess = ['P', 'G', 'R', 'O']
-    >>> ['b', 'b', 'b', 'b']
+    '''Output a 'b' for every guessed colors that are in the correct postition.
+    >>> find_fully_correct(['Y', 'B', 'B', 'R'], ['B', 'B', 'Y', 'P'])
+    ['b']
+    >>> find_fully_correct(['B', 'P', 'G', 'R'], ['G', 'P', 'G', 'R'])
+    ['b', 'b', 'b']
     '''
     correctly_positioned_colors = []
 
     for i in range(len(answer)):
         if answer[i] == guess[i]:
-            correctly_positioned_colors.append('b')
+            correctly_positioned_colors.append("b")
 
     return correctly_positioned_colors
 
+
 def remove_fully_correct(list1, list2):
-    ''' Returns a list that removed every correctly positioned valid guesses.
-    list1 = ['A', 'B', 'C', 'D']
-    list2 = ['D', 'B', 'A', 'D']
-    >>> ['A', 'C']
-    list1 = ['A', 'B', 'Y', 'G']
-    list2 = ['A', 'Y', 'Y', 'G']
-    >>> ['B']
+    '''Output a new list composed of colors which are not correctly positioned.
+    >>> remove_fully_correct(['Y', 'B', 'B', 'R'], ['B', 'B', 'Y', 'P'])
+    ['Y', 'B', 'R'], ['B', 'Y', 'P']
+    >>> remove_fully_correct(['B', 'P', 'G', 'R'], ['G', 'P', 'G', 'R'])
+    ['B'], ['G']
     '''
-    not_fully_correct = []
+    not_fully_correct_code = []
+    not_fully_correct_guess = []
 
     for i in range(len(list1)):
         if list1[i] != list2[i]:
-            not_fully_correct.append(list1[i])
+            not_fully_correct_code.append(list1[i])
+            not_fully_correct_guess.append(list2[i])    
 
-    return not_fully_correct
+    return not_fully_correct_code, not_fully_correct_guess
 
-def remove_fully_correct_from_guess(list1, list2):
-    ''' Returns a list that removed every correctly positioned valid guesses.
-    list1 = ['A', 'B', 'C', 'D']
-    list2 = ['D', 'B', 'A', 'D']
-    >>> ['D', 'A']
-    list1 = ['A', 'B', 'Y', 'G']
-    list2 = ['A', 'Y', 'Y', 'G']
-    >>> ['Y']
-    '''
-    not_fully_correct = []
-
-    for i in range(len(list1)):
-        if list1[i] != list2[i]:
-            not_fully_correct.append(list2[i])
-
-    return not_fully_correct
 
 def find_colour_correct(answer, guess):
-    ''' Returns a 'w' for each unique strings that are correct but not in the right place.
-    answer = ['Y', 'P', 'G', 'G']
-    guess = ['G', 'P', 'O', 'R']
-    >>> ['w']
-    answer = ['G', 'B', 'G', 'Y']
-    guess = ['B', 'B', 'Y', 'G']
-    >>> ['w', 'w', 'w']
+    '''Output a 'w' for every incorrectly positioned colors that exist in the
+    answer.
+    >>> find_colour_correct(['Y', 'B', 'B', 'R'], ['B', 'B', 'Y', 'P'])
+    ['w', 'w']
+    >>> find_colour_correct(['B', 'P', 'G', 'R'], ['G', 'P', 'G', 'R'])
+    []
     '''
     incorrect_position = []
 
     for i in guess:
         if i in answer:
-            incorrect_position.append('w')
-            answer[answer.index(i)] = ''
+            incorrect_position.append("w")
+            answer[answer.index(i)] = ""
 
     return incorrect_position
 
+
 def display_game(guesses, clues):
-    """ Displays the current guesses and clues
-    guesses = [['Y', 'P', 'G', 'G'], ['O', 'O', 'G', 'G']]
-    clues = [['b', 'b'], ['b', 'b', 'b', 'b']]
-    >>> '''
-        Guess    Clues
-        ****************
-        Y P G G  b b
-        O O G G  b b b b 
-        '''
-    """
-    current_state = 'Guess\tClues\n****************\n'
+    '''Every attempt, show the current and past attempts as well as the clues
+    outputted for each.'''
+    current_state = "Guess\tClues\n****************\n"
 
     for i in range(len(guesses)):
         condensed_letters = ' '.join(guesses[i])
         b_to_print = ' '.join(clues[i])
-        new_state = condensed_letters + '\t' + b_to_print + '\n'
+        new_state = condensed_letters + "\t" + b_to_print + "\n"
         current_state += new_state
 
     return current_state
 
+
 def valid(user_guess, valid_characters, guess_size):
-    ''' Returns False if the input breaks any rules
-    user_guess = ['A', 'B', 'C', 'X']
-    valid_characters = 'GRBYOP'
-    guess_size = 4
-    >>> False
+    '''Make sure that the input respects the game rules.
+    >>> valid(['B', 'B', 'Y', 'P'], "GRBYOP", 4)
+    True
+    >>> valid(['5', 'A', 'D', 'Y', 'P', 'R'], "GRBYOP", 4)
+    False
     '''
-    for i in range(guess_size):
-        if user_guess[i] not in valid_characters:
-            return False
-    
+    if len(user_guess) == guess_size:
+        for i in range(guess_size):
+            if user_guess[i] not in valid_characters:
+                return False
+    else: return False
+
     return True
