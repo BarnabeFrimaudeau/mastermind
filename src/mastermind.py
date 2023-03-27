@@ -39,13 +39,30 @@ def remove_fully_correct(list1, list2):
     list2 = ['A', 'Y', 'Y', 'G']
     >>> ['B']
     '''
-    not_same = []
+    not_fully_correct = []
 
     for i in range(len(list1)):
         if list1[i] != list2[i]:
-            not_same.append(list1[i])
+            not_fully_correct.append(list1[i])
 
-    return not_same
+    return not_fully_correct
+
+def remove_fully_correct_from_guess(list1, list2):
+    ''' Returns a list that removed every correctly positioned valid guesses.
+    list1 = ['A', 'B', 'C', 'D']
+    list2 = ['D', 'B', 'A', 'D']
+    >>> ['D', 'A']
+    list1 = ['A', 'B', 'Y', 'G']
+    list2 = ['A', 'Y', 'Y', 'G']
+    >>> ['Y']
+    '''
+    not_fully_correct = []
+
+    for i in range(len(list1)):
+        if list1[i] != list2[i]:
+            not_fully_correct.append(list2[i])
+
+    return not_fully_correct
 
 def find_colour_correct(answer, guess):
     ''' Returns a 'w' for each unique strings that are correct but not in the right place.
@@ -80,11 +97,9 @@ def display_game(guesses, clues):
 
     for i in range(len(guesses)):
         condensed_letters = ' '.join(guesses[i])
-        current_state += condensed_letters
-        current_state += '\t'
         b_to_print = ' '.join(clues[i])
-        current_state += b_to_print
-        current_state += '\n'
+        new_state = condensed_letters + '\t' + b_to_print + '\n'
+        current_state += new_state
 
     return current_state
 

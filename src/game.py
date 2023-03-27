@@ -27,7 +27,7 @@ if __name__ == '__main__':
 
         for j in find_fully_correct(code, user_guess):
             clues.append(j)
-        for j in find_colour_correct(remove_fully_correct(code, user_guess), user_guess):
+        for j in find_colour_correct(remove_fully_correct(code, user_guess), remove_fully_correct_from_guess(code, user_guess)):
             clues.append(j)
 
         clues_list.append(clues)
