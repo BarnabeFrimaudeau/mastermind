@@ -1,4 +1,5 @@
 import random
+import os
 
 
 def create_code(characters, length):
@@ -67,6 +68,7 @@ def display_game(guesses, clues):
     '''Every attempt, show the current and past attempts as well as the clues
     outputted for each.'''
     current_state = "Guess\tClues\n****************\n"
+    os.system("cls")
 
     for i in range(len(guesses)):
         condensed_letters = ' '.join(guesses[i])

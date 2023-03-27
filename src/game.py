@@ -9,6 +9,7 @@ if __name__ == "__main__":
     code = create_code(VALID_CHARS, SIZE)
     user_guesses = []
     clues_list = []
+    os.system("cls")
     
     for i in range(TRIES):
         while True:
